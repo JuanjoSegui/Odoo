@@ -1,0 +1,58 @@
+<odoo>
+  <data>
+    <record id="ir.ui.view." id="view_custom_crm_visit_form">
+      <field name="name">view.custom.crm.visita.form</field>
+      <field name="model">custom_crm.visit</field>
+      <field name="arch" type="xml">
+        <form string="Visita">
+        <sheet>
+          <group name ="group_top">
+            <group name ="group_left">
+                <field name="customer"/>
+                <field name="date"/>
+                <field name="type"/>
+              </group>             
+            <group name ="group_right">
+              <field name="name"/>
+              <field name="done"/>
+            </group>
+          </group>
+        </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_custom_crm_visit_tree">
+      <field name="name">view.custom.crm.visit.tree</field>
+      <field name="model">custom_crm.visit</field>
+      <field name="arch" type="xml">
+        <tree string="visit">
+            <field name="customer"/>
+            <field name="name"/>
+            <field name="type"/>
+            <field name="date"/>
+        </tree>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="action_custom_crm_visit_view">
+      <field name="name">Visita</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">custom_crm.visit</field>
+      <field name="view_mode">tree.form</field>
+      <field name="help" type="html">
+        <p class ="oe_view_nocontent_create">
+          Visitas
+        </p>
+        <p>
+          Click 'Nuevo' para añadir nuevos elementos
+        </p>
+      </field>
+    </record>
+  
+    <menuitem name="custom CRM" id="menu_custom_crm_root" sequence="10"/>
+    <menuitem name="Operaciones" id="menu_custom_crm_visit_categ" parent="menu_custom_crm_root" sequence="0"/>
+    <menuitem name="Visitas" id="menu_custom_crm_visit" parent="menu_custom_crm_visit_categ" sequence="0" action=""/>
+
+  </data>
+</odoo>
