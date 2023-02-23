@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+
+          <record id="student1" model="school.student">
+            <field name="name">Jose</field>
+            <field name="DNI">02345678G</field>
+            <field name="classroom" ref="school.class1"></field>
+          </record>
+    </data>
+</odoo>

@@ -1,0 +1,22 @@
+Shellscript para transformar un csv en xml para insertar los datos
+
+
+#!/bin/bash
+
+while read line
+do
+    nombre=(echo $line | out -d',' -f1)
+    dni=(echo $line | out -d',' -f2)
+    year=(echo $line | out -d',' -f3)
+    echo <record id="student$dni" model="school.student">
+    echo <field name="name">$nombre</field>
+    echo <field name="DNI">$dni</field>
+    echo <field name="birth_year">$year</field>
+    echo</record>
+done
+
+
+-f1 es la primera columna 
+hay que guardar el archivo en .sh y ejecutarlo en la terminal del usuario odoo
+
+./archivo.sh < archivo.csv > ruta/archivo/final.xml

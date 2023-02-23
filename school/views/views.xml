@@ -2,15 +2,125 @@
   <data>
     <!-- explicit list view definition -->
 
+
     <record model="ir.ui.view" id="school.student.list">
       <field name="name">school student list</field>
-      <field name="model">school.school</field>
+      <field name="model">school.student</field>
       <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
+        <tree decoration-info="birth_year&lt;2000">
+          <field name="name" />
+          <field name="birth_year" />
+          <field name="password" />
+        </tree>
+      </field>
+    </record>
+
+     <!-- explicit Search view definition -->
+
+
+     <record model="ir.ui.view" id="school.student.search">
+      <field name="name">school student search</field>
+      <field name="model">school.student</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="name" />
           <field name="birth_year"/>
           <field name="password"/>
-        </tree>
+          <field name="dni"/>
+          <!-- Se puede incluir condiciones de búsqueda-->
+          <field name ="birth_year" string="min year" filter_domain="[('birth_year','>=',self)]"/>
+          <!-- Tambien se pueden crear filtros de búsqueda-->
+          <filter name="greoup_by_classroom" string="Group by Classroom" context="{'group_by':'classroom'}"></filter>
+        </search>
+      </field>
+    </record>
+
+    <!-- explicit form view definition -->
+    <!-- Si no la especificas usa la vista predeterminada de Odoo -->
+
+
+    <record model="ir.ui.form" id="school.student.list">
+      <field name="name">school student list</field>
+      <field name="model">school.student</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+            <state>
+              <field name="state" widget="statusbar" />
+            </state>
+          </header>
+          <button name="regenerate_password" type="object" string="Regenerate password" />
+
+          <sheet>
+            <field name="photo" widget="image" />
+            <group>
+
+              <group>
+                <separator string="Personal Data"></separator>
+                <field name="name" />
+                <field name="birth_year" />
+                <field name="password" />
+                <field name="descrption" />
+
+              </group>
+              <group>
+
+                <separator string="Enrollment Data"></separator>
+                <field name="enrollment_date" />
+                <field name="last_login" />
+                <field name="is_student" class="oe_edit_only" /><!-- Si no funciona el class es
+                porque hay que sacarlo del crupo-->
+                <field name="classroom"
+                  attrs="{'invisible':[('is_student','=',False)]
+                                                'required':[('is_student','=',True)]
+                                              }" />
+              </group>
+              <notebook>
+                <page string="Teachers">
+                  <field name="teachers" />
+                  <tree>
+                    <field name="name" />
+                    <field name="topic" />
+                  </tree>
+                </page>
+              </notebook>
+
+            </group>
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- explicit kanban view definition -->
+
+    <record model="ir.ui.view" id="school.student_kanban">
+      <field name="name">school student kanban</field>
+      <field name="model">school.student</field>
+      <field name="arch" type="xml" quick_create="True">
+        <kanban default_group_by="classroom">
+          <field name="id"></field>
+          <templates>
+            <t t-name="kanban-box">
+              <div t-attf-class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                <a type="open">
+                  <img class="oe_kanban_image"
+                        t-att-src="kanban_image('school.student','photo', record.id.value)"/>
+                </a>
+                <div t-attf-class="oe_kanban_content">
+                  <h4>
+                    <a type="edit">
+                      <field name="name"></field>
+                    </a>
+                  </h4>
+                  <ul>
+                    <li>Classroom:<field name="classroom"></field></li>
+                  </ul>
+                </div>
+              </div>         
+             </t>
+        </templates>
+        </kanban>
       </field>
     </record>
 
@@ -19,7 +129,7 @@
     <record model="ir.actions.act_window" id="school.action_student_window">
       <field name="name">school student window</field>
       <field name="res_model">school.student</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,kanban</field>
     </record>
 
     <record model="ir.actions.act_window" id="school.action_classroom_window">
@@ -33,9 +143,9 @@
       <field name="res_model">school.teacher</field>
       <field name="view_mode">tree,form</field>
     </record>
-  
+
     <!-- server action to the one above -->
-<!--
+    <!--
     <record model="ir.actions.server" id="school.action_server">
       <field name="name">school server</field>
       <field name="model_id" ref="model_school_school"/>
@@ -52,19 +162,19 @@
 
     <!-- Top menu item -->
 
-    <menuitem name="school" id="school.menu_root"/>
+    <menuitem name="school" id="school.menu_root" />
     <!-- menu categories -->
 
-    <menuitem name="Management" id="school.menu_1" parent="school.menu_root"/>
+    <menuitem name="Management" id="school.menu_1" parent="school.menu_root" />
 
     <!-- actions -->
 
     <menuitem name="Students" id="school.menu_student_list" parent="school.menu_1"
-              action="school.action_student_window"/>
+      action="school.action_student_window" />
     <menuitem name="Classroom" id="school.menu_classroom_list" parent="classroom.menu_1"
-              action="school.action_classroom_window"/>
+      action="school.action_classroom_window" />
     <menuitem name="Teachers" id="school.menu_teacher_list" parent="teacher.menu_1"
-              action="school.action_teacher_window"/>
+      action="school.action_teacher_window" />
 
   </data>
 </odoo>

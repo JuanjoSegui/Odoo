@@ -1,0 +1,8 @@
+<odoo>
+    <data>
+
+          <record id="class1" model="school.classroom">
+            <field name="name">DAM</field>
+          </record>
+    </data>
+</odoo>
