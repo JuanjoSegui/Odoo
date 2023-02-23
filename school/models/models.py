@@ -21,10 +21,13 @@ class student(models.Model):
     enrrollment_date = fields.Datetime(default=lambda self: fields.Datetime.now())
     last_login = fields.Datetime()
     is_student = fields.Boolean()
-    photo = fields.Image(max_width=200,max_heigth=200)
+    photo = fields.Image(max_width=200,max_heigth=200)    
+    level = fields.Selection([('1','1'),('2','2')])
+
     #fields relacionaes 
-    classroom = fields.Many2one('school.classroom',ondelete='set null', help='La clase a la que va')
+    classroom = fields.Many2one('school.classroom',domain="[('level','=',level)]",ondelete='set null', help='La clase a la que va')
     teachers = fields.Many2many('school.teacher',related='classroom.teachers', readonly=True)
+    state = fields.Selection([('1','Enrolled'),('2','Student'),('3','Ex-Student')]default='1')
     
 
 class classroom(models.Model):
@@ -32,6 +35,7 @@ class classroom(models.Model):
     _description = 'Las clases'
 
     name = fields.Char()
+    level = fields.Selection([('1','1'),('2','2')])
     students = fields.One2many(string='Students',comodel_name='school.student',inverse_name='classroom')
     teachers = fields.Many2many(comodel_name='school.teacher',
                                 relation='teacher_classroom',
@@ -42,12 +46,9 @@ class classroom(models.Model):
                                 column1='classroom_id',
                                 column2='teacher_id')   
 
-    delegate = fields.Many2one('school.student',compute='_get_delegate')
     all_teachers = fields.Many2many('school.teacher',compute='_get_teachers')
     
-    def _get_delegate(self):
-        for c in self:
-            c.delegate = c.students[0].id
+   
 
     def _get_teachers(self):
         for c in self:
@@ -79,3 +80,8 @@ class teacher(models.Model):
 #Usamos la funcion propia de Postgree para que el DNI sea clave unica 
     _sql_constraints = [('dni_uniq','unique(dni)','El dni no puede repedirse')]
 
+#Funcion para cambiar la contraseña
+    def regenerate_password(self):
+        for s in self:
+            password=secrets.token_urlsafe(12)
+            s.write({'password':password})
