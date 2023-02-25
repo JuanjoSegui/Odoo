@@ -27,7 +27,7 @@ class student(models.Model):
     #fields relacionaes 
     classroom = fields.Many2one('school.classroom',domain="[('level','=',level)]",ondelete='set null', help='La clase a la que va')
     teachers = fields.Many2many('school.teacher',related='classroom.teachers', readonly=True)
-    state = fields.Selection([('1','Enrolled'),('2','Student'),('3','Ex-Student')]default='1')
+    state = fields.Selection([('1','Enrolled'),('2','Student'),('3','Ex-Student')],default='1')
     
 
 class classroom(models.Model):
