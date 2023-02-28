@@ -1,31 +1,42 @@
 <odoo>
   <data>
     <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="todo.list">
-      <field name="name">Todo list</field>
-      <field name="model">todo.todo</field>
+    <record model="ir.ui.view" id="view_tree_todo">
+      <field name="name">view tree todo</field>
+      <field name="model">td.todo</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
+          <field name="name" />
+          <field name="status" />
         </tree>
       </field>
     </record>
--->
+
+    <!-- explicit form view definition -->
+    <record model="ir.ui.view" id="view_form_todo">
+      <field name="name">view frm todo</field>
+      <field name="model">td.todo</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <field name="name" string="Descrpción de la tarea" />
+            <field name="status" string="Progreso" />
+          </sheet>
+        </form>
+      </field>
+    </record>
 
     <!-- actions opening views on models -->
-<!--
-    <record model="ir.actions.act_window" id="todo.action_window">
+
+    <record model="ir.actions.act_window" id="action_view_todo">
       <field name="name">Todo window</field>
-      <field name="res_model">todo.todo</field>
+      <field name="res_model">td.todo</field>
       <field name="view_mode">tree,form</field>
     </record>
--->
+
 
     <!-- server action to the one above -->
-<!--
+    <!--
     <record model="ir.actions.server" id="todo.action_server">
       <field name="name">Todo server</field>
       <field name="model_id" ref="model_todo_todo"/>
@@ -41,20 +52,20 @@
 -->
 
     <!-- Top menu item -->
-<!--
-    <menuitem name="Todo" id="todo.menu_root"/>
--->
+
+    <menuitem name="Todo" id="todo.menu" parent="" action="todo.action_view_todo" />
+
     <!-- menu categories -->
-<!--
-    <menuitem name="Menu 1" id="todo.menu_1" parent="todo.menu_root"/>
-    <menuitem name="Menu 2" id="todo.menu_2" parent="todo.menu_root"/>
--->
+
+    <menuitem name="Menu 1" id="todo.menu_1" parent="todo.menu_root" />
+    <menuitem name="Menu 2" id="todo.menu_2" parent="todo.menu_root" />
+
     <!-- actions -->
-<!--
+
     <menuitem name="List" id="todo.menu_1_list" parent="todo.menu_1"
-              action="todo.action_window"/>
+      action="todo.action_window" />
     <menuitem name="Server to list" id="todo" parent="todo.menu_2"
-              action="todo.action_server"/>
--->
+      action="todo.action_server" />
+
   </data>
 </odoo>
